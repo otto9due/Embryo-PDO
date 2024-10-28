@@ -35,6 +35,11 @@
          * @var array $insert
          */
         private $insert = [];
+
+        /**
+         * @var array $insertDuplicateKeyUpdate
+         */
+        private $insertDuplicateKeyUpdate = [];
         
         /**
          * @var array $update
@@ -152,6 +157,21 @@
         public function insert(array $data): Query
         {
             $this->insert = $data;
+            $query = $this->execute();
+            return $query;
+        }
+
+            /**
+         * "INSERT" on duplicate key update query.
+         *
+         * @param array $data
+         * @param array $update
+         * @return Query
+         */
+        public function insertOrUpdate(array $data, array $update): Query
+        {
+            $this->insert = $data;
+            $this->insertDuplicateKeyUpdate = $update;
             $query = $this->execute();
             return $query;
         }
