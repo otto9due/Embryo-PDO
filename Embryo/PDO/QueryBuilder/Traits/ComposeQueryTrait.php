@@ -27,7 +27,7 @@
                 $query = 'SELECT '.$this->select. ' FROM '.$this->table;
             }
 
-                    // insert
+            // insert
             if (!empty($this->insert)) {
                 $values = $this->insert;
                 $queryKeys = implode(", ", array_keys($values));
@@ -37,9 +37,9 @@
                     $toUpdate = $this->insertDuplicateKeyUpdate;
                     $toUpdateValues = [];
                     $toUpdateValuesQuery = [];
-                    foreach ($toUpdate as $key => $val) {
+                    foreach ($toUpdate as $key => $value) {
                         $dKey = "dk_$key";
-                        $toUpdateValues[$dKey] = $val;
+                        $toUpdateValues[$dKey] = $value;
                         $toUpdateValuesQuery[] = "$key = :$dKey";
                     }
                     $values += $toUpdateValues;
