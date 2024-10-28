@@ -27,7 +27,7 @@
                 $query = 'SELECT '.$this->select. ' FROM '.$this->table;
             }
 
-           // insert
+            // insert
             if (!empty($this->insert)) {
                 $values = $this->insert;
                 $queryKeys = implode(", ", array_keys($values));
@@ -35,13 +35,14 @@
                 $query = 'INSERT INTO ' . $this->table . ' (' . $queryKeys . ') VALUES (' . $queryValues . ')';
                 if (!empty($this->insertDuplicateKeyUpdate)) {
                     $dValues = [];
+                    $dKValues = [];
                     foreach ($this->insertDuplicateKeyUpdate as $col => $val) {
                         $key = "dk_$col";
                         $dValues[$key] = $val;
-                        $duplicateKeysValues[] = "$col = :dk_$col";
+                        $dKValues[] = "$col = :dk_$col";
                     }
                     $values += $dValues;
-                    $queryDuplicateValues = implode(', ', $duplicateKeysValues);
+                    $queryDuplicateValues = implode(', ', $dKValues);
                     $query .= ' ON DUPLICATE KEY UPDATE ' . $queryDuplicateValues;
                 }
             }
