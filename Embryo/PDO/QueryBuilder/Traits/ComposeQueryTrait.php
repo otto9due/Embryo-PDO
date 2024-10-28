@@ -27,23 +27,24 @@
                 $query = 'SELECT '.$this->select. ' FROM '.$this->table;
             }
 
-            // insert
+                    // insert
             if (!empty($this->insert)) {
                 $values = $this->insert;
                 $queryKeys = implode(", ", array_keys($values));
                 $queryValues = ':' . implode(", :", array_keys($values));
                 $query = 'INSERT INTO ' . $this->table . ' (' . $queryKeys . ') VALUES (' . $queryValues . ')';
                 if (!empty($this->insertDuplicateKeyUpdate)) {
-                    $dValues = [];
-                    $dKValues = [];
-                    foreach ($this->insertDuplicateKeyUpdate as $col => $val) {
-                        $key = "dk_$col";
-                        $dValues[$key] = $val;
-                        $dKValues[] = "$col = :dk_$col";
+                    $toUpdate = $this->insertDuplicateKeyUpdate;
+                    $toUpdateValues = [];
+                    $toUpdateValuesQuery = [];
+                    foreach ($toUpdate as $key => $val) {
+                        $dKey = "dk_$key";
+                        $toUpdateValues[$dKey] = $val;
+                        $toUpdateValuesQuery[] = "$key = :$dKey";
                     }
-                    $values += $dValues;
-                    $queryDuplicateValues = implode(', ', $dKValues);
-                    $query .= ' ON DUPLICATE KEY UPDATE ' . $queryDuplicateValues;
+                    $values += $toUpdateValues;
+                    $toUpdateQuery = implode(', ', $toUpdateValuesQuery);
+                    $query .= ' ON DUPLICATE KEY UPDATE ' . $toUpdateQuery;
                 }
             }
 
